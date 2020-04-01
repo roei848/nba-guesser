@@ -6,6 +6,6 @@ from Scrapper.models.score_models.team_game import TeamGame
 
 
 class Game:
-    def __init__(self, winning_team: TeamGame, losing_team: TeamGame):
-        self.winning_team = winning_team
-        self.losing_team = losing_team
+    def __init__(self, home_team: TeamGame, away_team: TeamGame):
+        self.home_team = home_team
+        self.away_team = away_team

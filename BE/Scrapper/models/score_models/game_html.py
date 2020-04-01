@@ -22,8 +22,8 @@ class GameHtml:
         convert the GameHtml class object to Game object
         :return: Game object
         """
-        winning_team, losing_team = self._get_teams()
-        return Game(winning_team, losing_team)
+        home_team, away_team = self._get_teams()
+        return Game(home_team, away_team)
 
     def _convert_to_leading_scorers(self):
         """
@@ -48,7 +48,11 @@ class GameHtml:
         splitted_result = self.result.split(',')
         winning_team = self._extract_team_data_from_result(splitted_result[0], self.winner_scorer)
         losing_team = self._extract_team_data_from_result(splitted_result[1], self.loser_scorer)
-        return winning_team, losing_team
+        if winning_team.home_or_away == 'home':
+            return winning_team, losing_team
+        else:
+            return losing_team, winning_team
+
 
     def _extract_team_data_from_result(self, team_result_data, scorer):
         """
