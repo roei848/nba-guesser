@@ -118,9 +118,6 @@ def extract_rosters():
             team_roster = TeamRoster(team_name, roster)
             rosters.append(team_roster)
 
-            if team_roster.team_name == 'Chicago Bulls':
-                print("stop")
-
     return rosters
 
 
@@ -246,8 +243,8 @@ def _extract_player_stats(player_stats):
 def main():
     # s_date = datetime(2020, 2, 1)
     # e_date = datetime(2020, 2, 2)
-    # extract_games_in_dates(s_date, e_date)
-    extract_rosters()
+    # games = extract_games_in_dates(s_date, e_date)
+    # rosters = extract_rosters()
     print("done")
 
 
