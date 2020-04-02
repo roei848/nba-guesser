@@ -11,3 +11,6 @@ class TeamGame:
         self.home_or_away = home_or_away
         self.score = score
         self.leading_scorer = leading_scorer
+
+    def to_json(self):
+        return self.__dict__

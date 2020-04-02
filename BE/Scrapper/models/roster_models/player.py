@@ -17,3 +17,5 @@ class Player:
         self.apg = apg
         self.per = per
 
+    def to_json(self):
+        return self.__dict__

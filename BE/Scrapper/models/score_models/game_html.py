@@ -53,7 +53,6 @@ class GameHtml:
         else:
             return losing_team, winning_team
 
-
     def _extract_team_data_from_result(self, team_result_data, scorer):
         """
         extract the data from the result and Create TeamGame object in return
@@ -66,3 +65,6 @@ class GameHtml:
         if splitted_team_data[0] == self.home_team:
             return TeamGame(self.home_team, "home", splitted_team_data[1], scorer)
         return TeamGame(self.away_team, "away", splitted_team_data[1], scorer)
+
+    def to_json(self):
+        return self.__dict__
