@@ -40,9 +40,7 @@ def extract_rosters():
             # store the roster in rosters dictionary
             team_roster = TeamRoster(team_name, roster)
             rosters.append(team_roster)
-            if team_roster.team_name == 'Brooklyn Nets':
-                print("STOP HERE!!")
-                return rosters
+
     return rosters
 
 
@@ -161,5 +159,4 @@ def _extract_player_stats(player_stats):
 
     except Exception as err:
         print(err)
-        print(player_stats)
         return '0.0', '0.0', '0.0', '0.0'
