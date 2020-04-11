@@ -39,7 +39,11 @@ def _generate_urls(start_date, end_date):
 
     urls = {}
     for date in dates:
-        urls[date] = base_url + str(date).replace('-', '')
+        # Reverse the date from 'yyyy-mm-dd' to 'dd-mm-yyyy'
+        reverse_date = date.split('-')
+        reverse_date.reverse()
+        new_date = '-'.join(reverse_date)
+        urls[new_date] = base_url + str(date).replace('-', '')
 
     return urls
 
@@ -75,10 +79,12 @@ def _extract_game(game_row):
     """
     cells = game_row.find_all("td")
     away_team = str(cells[0].find('a', {"class": "team-name"}).find('abbr').string)
+    away_team_name = str(cells[0].find('a', {"class": "team-name"}).find('abbr')['title'])
     home_team = str(cells[1].find('div').find('a', {"class": "team-name"}).find('abbr').string)
+    home_team_name = str(cells[1].find('div').find('a', {"class": "team-name"}).find('abbr')['title'])
     result = str(cells[2].find('a').string)
     winner_high = str(cells[3].text)
     loser_high = str(cells[4].text)
-    game_html = GameHtml(home_team, away_team, result, winner_high, loser_high)
+    game_html = GameHtml(home_team, home_team_name, away_team, away_team_name, result, winner_high, loser_high)
 
     return game_html.convert_to_game_class()

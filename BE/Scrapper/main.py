@@ -27,9 +27,9 @@ def main():
     We need to convert our objects to json before we try insert them to MongoDB
     """
     s_date = datetime(2020, 1, 1)
-    e_date = datetime(2020, 1, 2)
+    e_date = datetime(2020, 1, 3)
     games = extract_games_in_dates(s_date, e_date)
-    rosters = extract_rosters()
+    # rosters = extract_rosters()
 
     connection_string = f"mongodb+srv://{USER}:{PASSWORD}@nba-guesser-e7ccd.mongodb.net/test"
     mongo_manager = MongoManager(connection_string)
@@ -37,10 +37,10 @@ def main():
 
 
 
-    rosters_json = dumps([roster.to_json() for roster in rosters], cls=ComplexEncoder)
+    # rosters_json = dumps([roster.to_json() for roster in rosters], cls=ComplexEncoder)
     games_json = dumps([game.to_json() for game in games], cls=ComplexEncoder)
     mongo_manager.insert("games", games_json)
-    mongo_manager.insert("rosters", rosters_json)
+    # mongo_manager.insert("rosters", rosters_json)
 
 
     print("done")

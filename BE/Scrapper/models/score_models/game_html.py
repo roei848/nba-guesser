@@ -9,9 +9,11 @@ from Scrapper.models.score_models.leading_scorer import LeadingScorer
 
 
 class GameHtml:
-    def __init__(self, home_team, away_team, result, winner_high, loser_high):
+    def __init__(self, home_team, home_team_name, away_team, away_team_name, result, winner_high, loser_high):
         self.home_team = home_team
+        self.home_team_name = home_team_name
         self.away_team = away_team
+        self.away_team_name = away_team_name
         self.result = result
         self.winner_high = winner_high[:-3]
         self.loser_high = loser_high[:-3]
@@ -46,14 +48,14 @@ class GameHtml:
         :return: Teams in TeamGame class
         """
         splitted_result = self.result.split(',')
-        winning_team = self._extract_team_data_from_result(splitted_result[0], self.winner_scorer)
-        losing_team = self._extract_team_data_from_result(splitted_result[1], self.loser_scorer)
+        winning_team = self._extract_team_data_from_result(splitted_result[0], self.winner_scorer, win=True)
+        losing_team = self._extract_team_data_from_result(splitted_result[1], self.loser_scorer, win=False)
         if winning_team.home_or_away == 'home':
             return winning_team, losing_team
         else:
             return losing_team, winning_team
 
-    def _extract_team_data_from_result(self, team_result_data, scorer):
+    def _extract_team_data_from_result(self, team_result_data, scorer, win):
         """
         extract the data from the result and Create TeamGame object in return
         :param team_result_data: The team data from the result in GameHtml class
@@ -63,8 +65,8 @@ class GameHtml:
         result_data = team_result_data.strip()
         splitted_team_data = result_data.split(' ')
         if splitted_team_data[0] == self.home_team:
-            return TeamGame(self.home_team, "home", splitted_team_data[1], scorer)
-        return TeamGame(self.away_team, "away", splitted_team_data[1], scorer)
+            return TeamGame(self.home_team_name, "home", win, splitted_team_data[1], scorer)
+        return TeamGame(self.away_team_name, "away", win, splitted_team_data[1], scorer)
 
     def to_json(self):
         return self.__dict__
