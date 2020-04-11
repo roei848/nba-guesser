@@ -1,0 +1,16 @@
+.div-container {
+  margin: 20px;
+}
+
+.score {
+  float: right;
+}
+
+.scorer-pts {
+  margin-left: 5px;
+}
+
+.calendar-div {
+  text-align: center;
+  margin: 20px;
+}

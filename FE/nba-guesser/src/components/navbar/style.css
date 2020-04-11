@@ -1,0 +1,16 @@
+.app-bar-container {
+  color: whitesmoke !important;
+  width: 100% !important;
+}
+
+.dropdown-button {
+  color: whitesmoke !important;
+  height: 100% !important;
+  width: fit-content !important;
+}
+
+.google-auth {
+  right: 5px;
+  position: absolute;
+  margin-top: 6px;
+}
