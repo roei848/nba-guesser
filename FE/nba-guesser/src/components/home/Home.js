@@ -2,54 +2,33 @@ import React from "react";
 import GameCard from "./GameCard";
 import "./style.css";
 import CalendarDiv from "./CalendarDiv";
+import { connect } from "react-redux";
+import { fetchGames, selectDate } from "../../actions";
+import _ from "lodash";
+import CalendarList from "../calendar/CalendarList";
 
 class Home extends React.Component {
   state = {
     date: null,
-    document: {
-      date: "2020-01-01",
-      gamesArr: [
-        {
-          home_team: {
-            name: "WSH",
-            score: 101,
-            leadingScorer: { name: "Bradley Beal", pts: 27 },
-          },
-          away_team: {
-            name: "ORL",
-            score: 122,
-            leadingScorer: { name: "D.J. Augustin", pts: 25 },
-          },
-        },
-        {
-          home_team: {
-            name: "NY",
-            score: 117,
-            leadingScorer: { name: "Julius Randle", pts: 22 },
-          },
-          away_team: {
-            name: "POR",
-            score: 93,
-            leadingScorer: { name: "Carmelo Anthony", pts: 26 },
-          },
-        },
-      ],
-    },
   };
 
-  componentWillMount() {
-    this.renderDate();
+  componentDidMount() {
+    this.getDate();
   }
 
-  renderDate() {
-    const date = new Date().toLocaleDateString();
-    const dateString = this.convertDateToString(date);
+  onChangeDate(date) {
+    this.props.fetchGames(date);
+  }
 
-    this.setState({ date: dateString });
+  getDate() {
+    const date = new Date();
+    const dateString = this.convertDateToString(date);
+    this.props.fetchGames(dateString);
   }
 
   convertDateToString(date) {
-    var dateSplit = date.split(".");
+    var dateStr = date.toLocaleDateString();
+    var dateSplit = dateStr.split(".");
     var dateSplitAfter = dateSplit.map((number) => {
       if (number.length === 1) {
         return `0${number}`;
@@ -61,19 +40,28 @@ class Home extends React.Component {
   }
 
   renderGameCards() {
-    return this.state.document.gamesArr.map((game) => {
-      return <GameCard game={game} />;
-    });
+    if (_.isEmpty(this.props.games)) {
+      return <h1>Loading...</h1>;
+    } else {
+      return this.props.games.games.map((game, index) => {
+        return <GameCard game={game} key={index} />;
+      });
+    }
   }
 
   render() {
     return (
       <div className="ui container div-container">
-        <CalendarDiv date={this.state.date} />
+        {/* <CalendarDiv date={this.state.date} /> */}
+        <CalendarList daysForward={3} daysBack={2} />
         <div className="ui cards">{this.renderGameCards()}</div>
       </div>
     );
   }
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+  return { games: state.games, dates: state.dates };
+};
+
+export default connect(mapStateToProps, { fetchGames, selectDate })(Home);

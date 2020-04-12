@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
-import { ExpandTab } from "./ExpandTab";
+import ExpandTab from "./ExpandTab";
 import GoogleAuth from "../GoogleAuth";
 import { Link } from "react-router-dom";
 import "./style.css";
@@ -35,18 +35,20 @@ class Navbar extends React.Component {
             textColor="inherit"
           ></Tab>
           <Tab
-            component={() => (
+            component={React.forwardRef(() => (
               <ExpandTab title="Guess" menuItems={this.state.Tabs.guess} />
-            )}
-            value="/guess"
+            ))}
           ></Tab>
           <Tab
-            component={() => (
+            component={React.forwardRef(() => (
               <ExpandTab title="Leagues" menuItems={this.state.Tabs.leagues} />
-            )}
-            value="/leagues"
+            ))}
           ></Tab>
-          <Tab component={GoogleAuth} value="auth"></Tab>
+          <Tab
+            component={React.forwardRef(() => (
+              <GoogleAuth />
+            ))}
+          ></Tab>
         </Tabs>
       </AppBar>
     );

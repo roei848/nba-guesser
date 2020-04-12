@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import "./style.css";
 
-export function ExpandTab(props) {
+const ExpandTab = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -18,9 +18,9 @@ export function ExpandTab(props) {
   };
 
   const MenuItems = () => {
-    return props.menuItems.map((item) => {
+    return props.menuItems.map((item, index) => {
       return (
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleClose} key={index}>
           <Link to={item.path}>{item.tabName}</Link>
         </MenuItem>
       );
@@ -49,4 +49,6 @@ export function ExpandTab(props) {
       </Menu>
     </div>
   );
-}
+};
+
+export default ExpandTab;

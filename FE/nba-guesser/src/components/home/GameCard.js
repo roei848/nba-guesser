@@ -12,9 +12,9 @@ class GameCard extends React.Component {
             <span className="score">{home_team.score}</span>
           </h5>
           <p>
-            {home_team.leadingScorer.name}
+            {home_team.leading_scorer.name}
             <span className="scorer-pts">
-              {home_team.leadingScorer.pts} pts
+              {home_team.leading_scorer.pts} pts
             </span>
           </p>
           <h4
@@ -28,9 +28,9 @@ class GameCard extends React.Component {
             <span className="score">{away_team.score}</span>
           </h5>
           <p>
-            {away_team.leadingScorer.name}
+            {away_team.leading_scorer.name}
             <span className="scorer-pts">
-              {away_team.leadingScorer.pts} pts
+              {away_team.leading_scorer.pts} pts
             </span>
           </p>
         </div>
