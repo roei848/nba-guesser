@@ -50,9 +50,13 @@ class Home extends React.Component {
         ></CircularProgress>
       );
     } else if (this.state.date in this.props.games) {
-      return this.props.games[this.state.date].games.map((game, index) => {
-        return <GameCard game={game} key={index} />;
-      });
+      if (_.isEmpty(this.props.games[this.state.date].games)) {
+        return <h1>No games Today... :(</h1>;
+      } else {
+        return this.props.games[this.state.date].games.map((game, index) => {
+          return <GameCard game={game} key={index} />;
+        });
+      }
     } else {
       return (
         <CircularProgress
@@ -68,12 +72,12 @@ class Home extends React.Component {
     return (
       <div className="ui container div-container">
         <CalendarList
-          daysForward={3}
+          daysForward={7}
           daysBack={2}
           handleChangeDate={this.onChangeDate}
           selectedDate={this.state.date}
         />
-        <div className="ui cards">{this.renderGameCards()}</div>
+        <div className="ui cards cards-div">{this.renderGameCards()}</div>
       </div>
     );
   }
