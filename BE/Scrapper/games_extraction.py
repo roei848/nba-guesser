@@ -17,7 +17,9 @@ def extract_games_in_dates(start_date, end_date):
     all_games = []
     for date, url in urls.items():
         games = _extract_games_from_url(date, url)
-        all_games.append(GamesOfTheDay(date, games))
+        if games[0] is None:
+            print("No games today :-( ")
+        all_games.append(GamesOfTheDay(date, []))
 
     return all_games
 
@@ -78,13 +80,21 @@ def _extract_game(game_row):
     :return:
     """
     cells = game_row.find_all("td")
+
+    if len(cells) == 1:
+        return None
+
     away_team = str(cells[0].find('a', {"class": "team-name"}).find('abbr').string)
     away_team_name = str(cells[0].find('a', {"class": "team-name"}).find('abbr')['title'])
     home_team = str(cells[1].find('div').find('a', {"class": "team-name"}).find('abbr').string)
     home_team_name = str(cells[1].find('div').find('a', {"class": "team-name"}).find('abbr')['title'])
-    result = str(cells[2].find('a').string)
-    winner_high = str(cells[3].text)
-    loser_high = str(cells[4].text)
-    game_html = GameHtml(home_team, home_team_name, away_team, away_team_name, result, winner_high, loser_high)
+
+    if len(cells[3].text) != 0:
+        result = str(cells[2].find('a').string)
+        winner_high = str(cells[3].text)
+        loser_high = str(cells[4].text)
+        game_html = GameHtml(home_team, home_team_name, away_team, away_team_name, result, winner_high, loser_high)
+    else:
+        game_html = GameHtml(home_team, home_team_name, away_team, away_team_name, None, None, None)
 
     return game_html.convert_to_game_class()

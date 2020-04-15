@@ -1,11 +1,11 @@
 import React from "react";
 import GameCard from "./GameCard";
 import "./style.css";
-import CalendarDiv from "./CalendarDiv";
 import { connect } from "react-redux";
 import { fetchGames, selectDate } from "../../actions";
 import _ from "lodash";
 import CalendarList from "../calendar/CalendarList";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class Home extends React.Component {
   state = {
@@ -16,14 +16,15 @@ class Home extends React.Component {
     this.getDate();
   }
 
-  onChangeDate(date) {
+  onChangeDate = (date) => {
+    this.setState({ date: date });
     this.props.fetchGames(date);
-  }
+  };
 
   getDate() {
     const date = new Date();
     const dateString = this.convertDateToString(date);
-    this.props.fetchGames(dateString);
+    this.onChangeDate(dateString);
   }
 
   convertDateToString(date) {
@@ -41,19 +42,37 @@ class Home extends React.Component {
 
   renderGameCards() {
     if (_.isEmpty(this.props.games)) {
-      return <h1>Loading...</h1>;
-    } else {
-      return this.props.games.games.map((game, index) => {
+      return (
+        <CircularProgress
+          size={200}
+          thickness={5}
+          className="loading"
+        ></CircularProgress>
+      );
+    } else if (this.state.date in this.props.games) {
+      return this.props.games[this.state.date].games.map((game, index) => {
         return <GameCard game={game} key={index} />;
       });
+    } else {
+      return (
+        <CircularProgress
+          size={200}
+          thickness={5}
+          className="loading"
+        ></CircularProgress>
+      );
     }
   }
 
   render() {
     return (
       <div className="ui container div-container">
-        {/* <CalendarDiv date={this.state.date} /> */}
-        <CalendarList daysForward={3} daysBack={2} />
+        <CalendarList
+          daysForward={3}
+          daysBack={2}
+          handleChangeDate={this.onChangeDate}
+          selectedDate={this.state.date}
+        />
         <div className="ui cards">{this.renderGameCards()}</div>
       </div>
     );

@@ -26,8 +26,8 @@ def main():
     Our main function of the Scrapper, extract games and rosters and add them to MongoDB,
     We need to convert our objects to json before we try insert them to MongoDB
     """
-    s_date = datetime(2020, 1, 1)
-    e_date = datetime(2020, 1, 3)
+    s_date = datetime(2020, 4, 19)
+    e_date = datetime(2020, 4, 20)
     games = extract_games_in_dates(s_date, e_date)
     # rosters = extract_rosters()
 

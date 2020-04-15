@@ -40,8 +40,23 @@ class CalendarList extends Component {
         className="ui horizontal bulleted list"
         style={{ justifyContent: "center" }}
       >
-        {this.state.dates.map((date) => {
-          return <p className="item">{date}</p>;
+        {this.state.dates.map((date, index) => {
+          if (date === this.props.selectedDate) {
+            return (
+              <button key={index} className="item ui button primary">
+                {date}
+              </button>
+            );
+          }
+          return (
+            <button
+              key={index}
+              className="item ui button"
+              onClick={() => this.props.handleChangeDate(date)}
+            >
+              {date}
+            </button>
+          );
         })}
       </div>
     );

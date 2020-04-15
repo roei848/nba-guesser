@@ -1,5 +1,6 @@
 import { SIGN_IN, SIGN_OUT, FETCH_GAMES, SELECT_DATE } from "./types";
 import mongo_api from "../apis/mongo_api";
+import _ from "lodash";
 
 export const signIn = (userId) => {
   return {
@@ -14,11 +15,13 @@ export const signOut = () => {
   };
 };
 
-export const fetchGames = (date) => async (dispatch) => {
+export const fetchGames = (date) => async (dispatch) =>
+  _fetchGames(date, dispatch);
+const _fetchGames = _.memoize(async (date, dispatch) => {
   const response = await mongo_api.get(`/games/${date}`);
 
   dispatch({ type: FETCH_GAMES, payload: response.data });
-};
+});
 
 export const selectDate = (date) => {
   return {

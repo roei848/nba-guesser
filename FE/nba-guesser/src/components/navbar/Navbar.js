@@ -27,7 +27,7 @@ class Navbar extends React.Component {
         className="app-bar-container"
         position="relative"
       >
-        <Tabs>
+        <Tabs value={false}>
           <Tab
             component={Link}
             to="/"

@@ -1,0 +1,24 @@
+//League
+{
+  "mongo_id (league_id)": 3211521423514,
+  "leagueName": "My League",
+  "password": "roei848",
+  "startDate": "13-04-2020",
+  "participants": [
+    //Team objects
+    {
+      "team_id": 2157125425132,
+      "user_id": 154123525,
+      "team_name": "jordans",
+      "coach_name": "roei cohen",
+      "pts": 142
+    },
+    {
+      "team_id": 1423341254216,
+      "user_id": 154123525,
+      "team_name": "splash",
+      "coach_name": "Dan biton",
+      "pts": 124
+    }
+  ]
+}
