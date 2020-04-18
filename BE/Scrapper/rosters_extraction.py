@@ -41,10 +41,6 @@ def extract_rosters():
             team_roster = TeamRoster(team_name, roster)
             rosters.append(team_roster)
 
-            if team_name == 'Brooklyn Nets':
-
-                return rosters
-
     return rosters
 
 

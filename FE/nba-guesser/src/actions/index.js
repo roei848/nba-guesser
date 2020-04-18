@@ -1,4 +1,10 @@
-import { SIGN_IN, SIGN_OUT, FETCH_GAMES, SELECT_DATE } from "./types";
+import {
+  SIGN_IN,
+  SIGN_OUT,
+  FETCH_GAMES,
+  SELECT_DATE,
+  FETCH_ROSTERS,
+} from "./types";
 import mongo_api from "../apis/mongo_api";
 import _ from "lodash";
 
@@ -29,3 +35,10 @@ export const selectDate = (date) => {
     payload: date,
   };
 };
+
+export const fetchRosters = () => async (dispatch) => _fetchRosters(dispatch);
+const _fetchRosters = _.memoize(async (dispatch) => {
+  const response = await mongo_api.get("/rosters");
+
+  dispatch({ type: FETCH_ROSTERS, payload: response.data });
+});

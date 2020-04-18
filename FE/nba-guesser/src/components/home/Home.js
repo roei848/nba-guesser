@@ -9,14 +9,16 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 class Home extends React.Component {
   state = {
-    date: null,
+    date: null, //the selected date, shows game cards of this date
   };
 
   componentDidMount() {
+    //get current date and render game cards for this date
     this.getDate();
   }
 
   onChangeDate = (date) => {
+    //when we call this it replace the date and render our date game cards
     this.setState({ date: date });
     this.props.fetchGames(date);
   };
@@ -28,6 +30,7 @@ class Home extends React.Component {
   }
 
   convertDateToString(date) {
+    //convert date to a string that our api could work with
     var dateStr = date.toLocaleDateString();
     var dateSplit = dateStr.split(".");
     var dateSplitAfter = dateSplit.map((number) => {
@@ -41,6 +44,7 @@ class Home extends React.Component {
   }
 
   renderGameCards() {
+    //render game cards depending on the api response
     if (_.isEmpty(this.props.games)) {
       return (
         <CircularProgress

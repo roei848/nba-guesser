@@ -2,9 +2,12 @@ import React from "react";
 import "./style.css";
 
 const GameCard = (props) => {
+  //Game card component, render for every game a card
   const { home_team, away_team } = props.game;
   const isGamePlayed = home_team.score != null;
+  //check if the game played or in the future
   const renderScores = (scorer) => {
+    //render scorer only if the game has played
     if (isGamePlayed) {
       return (
         <p>

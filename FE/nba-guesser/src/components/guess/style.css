@@ -1,0 +1,55 @@
+.div-container {
+  margin: 20px;
+}
+
+.calendar-div {
+  text-align: center;
+  margin: 20px;
+}
+
+.loading {
+  position: fixed;
+  top: 40%;
+  left: 40%;
+}
+
+.cards-div {
+  margin-top: 20px !important;
+}
+
+.buttons-div {
+  margin: 6px;
+  display: flex;
+  margin-top: 15px;
+  justify-content: space-between;
+}
+
+.guess-form {
+  margin: 10px;
+}
+
+.scorer-dropdown {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.dot {
+  height: 15px;
+  width: 15px;
+  border-radius: 80%;
+  display: inline-block;
+  margin-left: 20px;
+  vertical-align: text-top;
+}
+
+.active {
+  background-color: green;
+}
+
+.out {
+  background-color: red;
+}
+
+.day-to-day {
+  background-color: yellowgreen;
+}
