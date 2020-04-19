@@ -1,0 +1,11 @@
+//Team in League,
+{
+  "mongo_id(guess_id)": 134134251523,
+  "user_id": 124432152531425416,
+  "game_id": "12-04-2020-2",
+  "guess": {
+    "winner": "Boston Celtics",
+    "home_team_scorer": "Jason Tatum",
+    "away_team_scorer": "Roei Cohen"
+  }
+}

@@ -20,7 +20,8 @@ def get_score_leader_points(score):
 
 
 class GameHtml:
-    def __init__(self, home_team, home_team_name, away_team, away_team_name, result, winner_high, loser_high):
+    def __init__(self, game_id, home_team, home_team_name, away_team, away_team_name, result, winner_high, loser_high):
+        self.game_id = game_id
         self.home_team = home_team
         self.home_team_name = home_team_name
         self.away_team = away_team
@@ -36,7 +37,7 @@ class GameHtml:
         :return: Game object
         """
         home_team, away_team = self._get_teams()
-        return Game(home_team, away_team)
+        return Game(self.game_id, home_team, away_team)
 
     def _convert_to_leading_scorers(self):
         """

@@ -43,5 +43,37 @@ def get_roster_by_team(team_name):
     return res
 
 
+@app.route(base_url + "/guesses/post", methods=['POST'])
+def add_guess():
+    json = request.json
+    print(json)
+    user_id = json["user_id"]
+    game_id = json["game_id"]
+    guess = json["guess"]
+
+    if user_id and game_id and guess and request.method == 'POST':
+        mongo.db.guesses.insert({'user_id': user_id, 'game_id': game_id, 'guess': guess})
+        resp = jsonify("Guess added successfully")
+        resp.status_code = 200
+
+        return resp
+
+    else:
+        return not_found()
+
+
+@app.errorhandler(404)
+def not_found(error=None):
+    message = {
+        'status': 404,
+        'message': 'Not Found ' + request.url
+    }
+    resp = jsonify(message)
+
+    resp.status_code = 404
+
+    return resp
+
+
 if __name__ == '__main__':
     app.run(debug=True)

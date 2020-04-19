@@ -19,7 +19,9 @@ def extract_games_in_dates(start_date, end_date):
         games = _extract_games_from_url(date, url)
         if games[0] is None:
             print("No games today :-( ")
-        all_games.append(GamesOfTheDay(date, []))
+            all_games.append(GamesOfTheDay(date, []))
+        else:
+            all_games.append(GamesOfTheDay(date, games))
 
     return all_games
 
@@ -65,15 +67,19 @@ def _extract_games_from_url(date, url):
     print(f"Extract games - {date}")
     print("///////////////////////////////////")
     games_rows = games_table.find('tbody').find_all('tr')
+    i = 0
     for game_row in games_rows:
         # runs on the table rows and extract game data, store them in games list for each date
-        game = _extract_game(game_row)
+        game_id = f"{date}-{i}"
+        print(game_id)
+        game = _extract_game(game_row, game_id)
         games.append(game)
+        i += 1  # increase in one every id for game
 
     return games
 
 
-def _extract_game(game_row):
+def _extract_game(game_row, game_id):
     """
     extract game from row and return it as an Game class
     :param game_row: row in the games table
@@ -93,8 +99,9 @@ def _extract_game(game_row):
         result = str(cells[2].find('a').string)
         winner_high = str(cells[3].text)
         loser_high = str(cells[4].text)
-        game_html = GameHtml(home_team, home_team_name, away_team, away_team_name, result, winner_high, loser_high)
+        game_html = GameHtml(game_id, home_team, home_team_name, away_team, away_team_name, result, winner_high,
+                             loser_high)
     else:
-        game_html = GameHtml(home_team, home_team_name, away_team, away_team_name, None, None, None)
+        game_html = GameHtml(game_id, home_team, home_team_name, away_team, away_team_name, None, None, None)
 
     return game_html.convert_to_game_class()
