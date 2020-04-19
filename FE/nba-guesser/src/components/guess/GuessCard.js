@@ -1,16 +1,19 @@
 import React from "react";
 import "./style.css";
 import GameCard from "../home/GameCard";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, SubmissionError } from "redux-form";
 import DropdownList from "react-widgets/lib/DropdownList";
 import SelectList from "react-widgets/lib/SelectList";
 import "react-widgets/dist/css/react-widgets.css";
 import { connect } from "react-redux";
+import { createGuess } from "../../actions";
 import _ from "lodash";
 import "./style.css";
 
 const renderDropdownList = ({ input, ...rest }) => (
-  <DropdownList {...input} {...rest} />
+  <div>
+    <DropdownList {...input} {...rest} />
+  </div>
 );
 
 const renderSelectList = ({ input, ...rest }) => (
@@ -18,12 +21,13 @@ const renderSelectList = ({ input, ...rest }) => (
 );
 
 const GuessCard = (props) => {
-  const { handleSubmit, pristine, reset, submitting } = props;
-  const { home_team, away_team } = props.game;
+  const { handleSubmit, pristine, reset, submitting, error, userId } = props;
+  const { home_team, away_team, game_id } = props.game;
   const isGamePlayed = home_team.score != null;
   const isRostersLoaded = !_.isEmpty(props.rosters);
 
   const createPlayers = (team_name) => {
+    //create players for dropdown list
     let players = [];
 
     props.rosters[team_name].map((player) => {
@@ -51,11 +55,13 @@ const GuessCard = (props) => {
   var homeTeamPlayers, awayTeamPlayers;
 
   if (isRostersLoaded) {
+    //if rosters in store loaded create dropdown lists
     homeTeamPlayers = createPlayers(home_team.name);
     awayTeamPlayers = createPlayers(away_team.name);
   }
 
   let playerInDropdown = ({ item }) => {
+    //component for every player in dropdown
     const { player } = item;
     return (
       <span className="dropdown-list-item">
@@ -76,13 +82,43 @@ const GuessCard = (props) => {
     );
   };
 
-  const onResetValues = () => {
-    console.log("called reset");
-    document.getElementById("guess-form").reset();
-  };
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const onSubmit = () => {
+  const submit = (values) => {
+    //called when we submit our guess
     console.log("called submit");
+    console.log(values, "values");
+    return sleep(1000).then(() => {
+      // simulate server latency
+      if (!("homeScorer" in values)) {
+        console.log("error homeScorer");
+        throw new SubmissionError({
+          homeScorer: "Choose home scorer",
+          _error: "Submit failed - Choose home team scorer",
+        });
+      } else if (!("awayScorer" in values)) {
+        throw new SubmissionError({
+          awayScorer: "Choose away scorer",
+          _error: "Submit failed - Choose away team scorer",
+        });
+      } else if (!("winner" in values)) {
+        throw new SubmissionError({
+          winner: "Choose winner",
+          _error: "Submit failed - Choose winner",
+        });
+      } else {
+        const body = {
+          user_id: userId,
+          game_id: game_id,
+          guess: values,
+        };
+        console.log(body, "body");
+        console.log("call create guess");
+        props.createGuess(body);
+
+        reset();
+      }
+    });
   };
 
   //check if the game played or in the future
@@ -93,7 +129,7 @@ const GuessCard = (props) => {
     } else {
       return (
         <div className="ui card">
-          <form className="guess-form" id="guess-form">
+          <form className="guess-form" onSubmit={handleSubmit(submit)}>
             <div className="content ">
               <h5>{home_team.name}</h5>
               <label>Scoring Leader: </label>
@@ -133,10 +169,9 @@ const GuessCard = (props) => {
               component={renderSelectList}
               data={[home_team.name, away_team.name]}
             />
+            {error && <strong>{error}</strong>}
             <div className="buttons-div">
-              <button type="submit" onClick={onSubmit}>
-                Submit
-              </button>
+              <button type="submit">Submit</button>
               <button type="button" onClick={reset}>
                 Reset Values
               </button>
@@ -147,7 +182,7 @@ const GuessCard = (props) => {
     }
   };
 
-  console.log(props.id);
+  console.log(props);
 
   return <>{renderCard()}</>;
 };
@@ -155,9 +190,10 @@ const GuessCard = (props) => {
 const mapStateToProps = (state) => {
   return {
     rosters: state.rosters,
+    userId: state.auth.userId,
   };
 };
 
 const formWrapped = reduxForm()(GuessCard);
 
-export default connect(mapStateToProps)(formWrapped);
+export default connect(mapStateToProps, { createGuess })(formWrapped);

@@ -4,6 +4,7 @@ import {
   FETCH_GAMES,
   SELECT_DATE,
   FETCH_ROSTERS,
+  CREAETE_GUESS,
 } from "./types";
 import mongo_api from "../apis/mongo_api";
 import _ from "lodash";
@@ -42,3 +43,9 @@ const _fetchRosters = _.memoize(async (dispatch) => {
 
   dispatch({ type: FETCH_ROSTERS, payload: response.data });
 });
+
+export const createGuess = (body) => async (dispatch) => {
+  const response = await mongo_api.post("/guesses/post", body);
+
+  dispatch({ type: CREAETE_GUESS, payload: response.data });
+};

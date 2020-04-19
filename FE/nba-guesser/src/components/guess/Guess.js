@@ -59,13 +59,7 @@ class Guess extends React.Component {
         return <h1>No games at this day... :(</h1>;
       } else {
         return this.props.games[this.state.date].games.map((game, index) => {
-          return (
-            <GuessCard
-              game={game}
-              key={index}
-              form={`CreateGuess-${this.state.date}-${index}`}
-            />
-          );
+          return <GuessCard game={game} key={index} form={game.game_id} />;
         });
       }
     } else {
