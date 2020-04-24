@@ -53,3 +53,7 @@
 .day-to-day {
   background-color: yellowgreen;
 }
+
+.guessed {
+  cursor: not-allowed;
+}

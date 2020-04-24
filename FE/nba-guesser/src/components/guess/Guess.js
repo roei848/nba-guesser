@@ -2,7 +2,11 @@ import React from "react";
 import GuessCard from "./GuessCard";
 import "./style.css";
 import { connect } from "react-redux";
-import { fetchGames, fetchRosters, selectDate } from "../../actions";
+import {
+  fetchGames,
+  fetchRosters,
+  fetchUserGuessesByDate,
+} from "../../actions";
 import _ from "lodash";
 import CalendarList from "../calendar/CalendarList";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -44,9 +48,20 @@ class Guess extends React.Component {
     return dateString;
   }
 
+  componentDidUpdate = () => {
+    console.log("componentDid Update");
+    if (this.props.userId && this.state.date) {
+      console.log("call fetch");
+      this.props.fetchUserGuessesByDate(this.state.date, this.props.userId);
+    }
+  };
+
   renderGuessCards() {
     //render game cards depending on the api response
-    if (_.isEmpty(this.props.games)) {
+    const userGuesses = this.props.userGuesses[this.state.date];
+    const isGamesNotLoaded = _.isEmpty(this.props.games);
+
+    if (isGamesNotLoaded || userGuesses === undefined) {
       return (
         <CircularProgress
           size={200}
@@ -58,8 +73,31 @@ class Guess extends React.Component {
       if (_.isEmpty(this.props.games[this.state.date].games)) {
         return <h1>No games at this day... :(</h1>;
       } else {
-        return this.props.games[this.state.date].games.map((game, index) => {
-          return <GuessCard game={game} key={index} form={game.game_id} />;
+        return this.props.games[this.state.date].games.map((game) => {
+          const isGameGuessedAlready = userGuesses.some(
+            (guess) => guess.game_id === game.game_id
+          );
+          if (isGameGuessedAlready) {
+            return (
+              <GuessCard
+                game={game}
+                key={game.game_id}
+                form={game.game_id}
+                date={this.state.date}
+                guessed={true}
+              />
+            );
+          } else {
+            return (
+              <GuessCard
+                game={game}
+                key={game.game_id}
+                form={game.game_id}
+                date={this.state.date}
+                guessed={false}
+              />
+            );
+          }
         });
       }
     } else {
@@ -89,11 +127,16 @@ class Guess extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return { games: state.games, dates: state.dates, rosters: state.rosters };
+  return {
+    games: state.games,
+    rosters: state.rosters,
+    userId: state.auth.userId,
+    userGuesses: state.user,
+  };
 };
 
 export default connect(mapStateToProps, {
   fetchRosters,
-  selectDate,
   fetchGames,
+  fetchUserGuessesByDate,
 })(Guess);

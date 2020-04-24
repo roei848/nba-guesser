@@ -21,7 +21,16 @@ const renderSelectList = ({ input, ...rest }) => (
 );
 
 const GuessCard = (props) => {
-  const { handleSubmit, pristine, reset, submitting, error, userId } = props;
+  const {
+    handleSubmit,
+    pristine,
+    reset,
+    submitting,
+    error,
+    userId,
+    date,
+    guessed,
+  } = props;
   const { home_team, away_team, game_id } = props.game;
   const isGamePlayed = home_team.score != null;
   const isRostersLoaded = !_.isEmpty(props.rosters);
@@ -86,12 +95,9 @@ const GuessCard = (props) => {
 
   const submit = (values) => {
     //called when we submit our guess
-    console.log("called submit");
-    console.log(values, "values");
     return sleep(1000).then(() => {
       // simulate server latency
       if (!("homeScorer" in values)) {
-        console.log("error homeScorer");
         throw new SubmissionError({
           homeScorer: "Choose home scorer",
           _error: "Submit failed - Choose home team scorer",
@@ -107,15 +113,17 @@ const GuessCard = (props) => {
           _error: "Submit failed - Choose winner",
         });
       } else {
-        const body = {
-          user_id: userId,
-          game_id: game_id,
-          guess: values,
+        const guess = {
+          winner: values.winner,
+          homeScorer: values.homeScorer.value,
+          awayScorer: values.awayScorer.value,
         };
-        console.log(body, "body");
-        console.log("call create guess");
-        props.createGuess(body);
-
+        const body = {
+          date: date,
+          game_id: game_id,
+          guess: guess,
+        };
+        props.createGuess(userId, body);
         reset();
       }
     });
@@ -128,7 +136,7 @@ const GuessCard = (props) => {
       return <GameCard game={props.game}></GameCard>;
     } else {
       return (
-        <div className="ui card">
+        <div className={`ui card ${guessed ? "guessed" : ""}`}>
           <form className="guess-form" onSubmit={handleSubmit(submit)}>
             <div className="content ">
               <h5>{home_team.name}</h5>
@@ -143,6 +151,8 @@ const GuessCard = (props) => {
                 valueField="value"
                 itemComponent={playerInDropdown}
                 textField="text"
+                placeholder="Choose Scoring Leader"
+                disabled={guessed}
               />
               <h4
                 className="ui horizontal inverted divider"
@@ -162,17 +172,31 @@ const GuessCard = (props) => {
                 valueField="value"
                 itemComponent={playerInDropdown}
                 textField="text"
+                placeholder="Choose Scoring Leader"
+                disabled={guessed}
               />
             </div>
             <Field
               name="winner"
               component={renderSelectList}
               data={[home_team.name, away_team.name]}
+              disabled={guessed}
             />
             {error && <strong>{error}</strong>}
             <div className="buttons-div">
-              <button type="submit">Submit</button>
-              <button type="button" onClick={reset}>
+              <button
+                type="submit"
+                className="ui button primary"
+                disabled={guessed}
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                onClick={reset}
+                className="ui button"
+                disabled={guessed}
+              >
                 Reset Values
               </button>
             </div>
@@ -181,8 +205,6 @@ const GuessCard = (props) => {
       );
     }
   };
-
-  console.log(props);
 
   return <>{renderCard()}</>;
 };

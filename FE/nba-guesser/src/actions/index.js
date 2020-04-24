@@ -4,7 +4,9 @@ import {
   FETCH_GAMES,
   SELECT_DATE,
   FETCH_ROSTERS,
-  CREAETE_GUESS,
+  CREATE_GUESS,
+  CREATE_USER_COLLECTIONS,
+  FETCH_USER_GUESSES_BY_DATE,
 } from "./types";
 import mongo_api from "../apis/mongo_api";
 import _ from "lodash";
@@ -44,8 +46,27 @@ const _fetchRosters = _.memoize(async (dispatch) => {
   dispatch({ type: FETCH_ROSTERS, payload: response.data });
 });
 
-export const createGuess = (body) => async (dispatch) => {
-  const response = await mongo_api.post("/guesses/post", body);
+export const createGuess = (userId, body) => async (dispatch) => {
+  const response = await mongo_api.post(`/guesses/post/${userId}`, body);
 
-  dispatch({ type: CREAETE_GUESS, payload: response.data });
+  dispatch({ type: CREATE_GUESS, payload: response.data });
 };
+
+export const createUserCollections = (userId) => async (dispatch) => {
+  const response = await mongo_api.get(`/userCreate/${userId}`);
+
+  dispatch({ type: CREATE_USER_COLLECTIONS, payload: response.data });
+};
+
+export const fetchUserGuessesByDate = (date, userId) => async (dispatch) =>
+  _fetchUserGuessesByDate(date, userId, dispatch);
+const _fetchUserGuessesByDate = _.memoize(async (date, userId, dispatch) => {
+  console.log(`/userGuesses/${userId}/${date}`);
+  const response = await mongo_api.get(`/userGuesses/${userId}/${date}`);
+
+  dispatch({
+    type: FETCH_USER_GUESSES_BY_DATE,
+    payload: response.data,
+    date: date,
+  });
+});
