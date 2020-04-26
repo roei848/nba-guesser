@@ -1,0 +1,9 @@
+.buttons-div {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.create-div,
+.join-div {
+  margin: 20px;
+}

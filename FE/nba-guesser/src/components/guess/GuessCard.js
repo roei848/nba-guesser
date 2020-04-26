@@ -21,16 +21,7 @@ const renderSelectList = ({ input, ...rest }) => (
 );
 
 const GuessCard = (props) => {
-  const {
-    handleSubmit,
-    pristine,
-    reset,
-    submitting,
-    error,
-    userId,
-    date,
-    guessed,
-  } = props;
+  const { handleSubmit, reset, error, userId, date, guessed } = props;
   const { home_team, away_team, game_id } = props.game;
   const isGamePlayed = home_team.score != null;
   const isRostersLoaded = !_.isEmpty(props.rosters);
@@ -39,7 +30,7 @@ const GuessCard = (props) => {
     //create players for dropdown list
     let players = [];
 
-    props.rosters[team_name].map((player) => {
+    props.rosters[team_name].forEach((player) => {
       const playerObj = {
         player: {
           first_name: player.first_name,

@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import "./style.css";
 
 class MyLeagues extends React.Component {
   state = {
@@ -59,6 +61,14 @@ class MyLeagues extends React.Component {
           </thead>
           {this.renderTableBody()}
         </table>
+        <div className="buttons-div">
+          <Link className="ui button big" to="/leagues/create">
+            Create New League
+          </Link>
+          <Link className="ui button big" to="/leagues/join">
+            Join League
+          </Link>
+        </div>
       </div>
     );
   }

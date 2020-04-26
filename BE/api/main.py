@@ -102,6 +102,8 @@ def get_user_guesses_by_date(user_id, date):
         not_found()
 
 
+
+
 @app.errorhandler(404)
 def not_found(error=None):
     message = {
